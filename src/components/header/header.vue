@@ -36,7 +36,7 @@
             <div class="detail-wrapper clearfix">
                 <div class="detail-main">
                   <h1 class="name" >{{seller.name}}</h1>
-                  <star size="24" score="3"></star>
+                  <star size="36" score="3.6"></star>
                 </div>
             </div>
             <div class="detail-close" @click="closeDetail()">
@@ -217,10 +217,12 @@
                     margin-top 64px
                     padding-bottom 64px     // 这里内容有个 padding-bottom 后可以将下面的关闭按钮撑开，而不会覆盖上去
                     .name
-                        line-height 16px
-                        text-align center
-                        font-size 16px
-                        font-weight 700
+                      line-height 16px
+                      text-align center
+                      font-size 16px
+                      font-weight 700
+                    .star
+                      text-align center
             .detail-close
                 position relative
                 width 32px
