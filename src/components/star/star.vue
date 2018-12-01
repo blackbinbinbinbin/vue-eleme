@@ -57,7 +57,6 @@
 									continue;
 								}
 							}
-							console.log(classes_item_list);
 							return classes_item_list;
 						}
 				}

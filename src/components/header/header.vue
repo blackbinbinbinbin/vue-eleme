@@ -17,14 +17,14 @@
                         <span class="text">{{ seller.supports[0].description }}</span>
                 </div>
             </div>
-            <div v-if="seller.supports" class="support-count">
+            <div v-if="seller.supports" class="support-count" @click="showDetail()">
                 <span class="count">{{seller.supports.length}}个</span>
                 <i class="icon-keyboard_arrow_right"></i>
             </div>
         </div>
-        <div class="bulletin-wrapper" @click="showDetail()">
+        <div v-if="seller.bulletin" class="bulletin-wrapper" @click="showDetail()">
             <span class="bulletin-title"></span>
-            <span class="bulletin-text">lallalalalallalal...</span>
+            <span class="bulletin-text">{{getBulletin}}</span>
             <i class="icon-keyboard_arrow_right"></i>
         </div>
         <!-- 背景图片 -->
@@ -36,7 +36,28 @@
             <div class="detail-wrapper clearfix">
                 <div class="detail-main">
                   <h1 class="name" >{{seller.name}}</h1>
-                  <star size="36" score="3.6"></star>
+                  <star size="48" score="3.6"></star>
+                  <div class="title">
+                    <div class="line"></div>
+                    <div class="text">优惠信息</div>
+                    <div class="line"></div>
+                  </div>
+                  <ul class="support_items" v-if="seller.supports">
+                    <li class="support_item" v-for="support in seller.supports" :key="support.id">
+                      <span class="icon" :class="getSupportsIconClass(support.type)"></span>
+                      {{ support.description }}
+                    </li>
+                  </ul>
+                  <div class="title">
+                    <div class="line"></div>
+                    <div class="text">商家信息</div>
+                    <div class="line"></div>
+                  </div>
+                  <div class="seller_bulletin">
+                    <p class="content">
+                      {{seller.bulletin}}
+                    </p>
+                  </div>
                 </div>
             </div>
             <div class="detail-close" @click="closeDetail()">
@@ -63,13 +84,20 @@
         },
         computed: {
             getSupportsIconClass () {
-                return function (type) {
-                    if (this.supports_icon_map[type]) {
-                        return this.supports_icon_map[type];
-                    } else {
-                        return '';
-                    }
+              return function (type) {
+                if (this.supports_icon_map[type]) {
+                    return this.supports_icon_map[type];
+                } else {
+                    return '';
                 }
+              }
+            },
+            getBulletin () {
+              if (this.seller != undefined) {
+                var bulletin = this.seller.bulletin;
+                return bulletin.substring(0,23) + '...';
+              }
+              return '';
             }
         },
         methods: {
@@ -77,7 +105,6 @@
               this.isShowDetail = true;
             },
             closeDetail () {
-              console.log("closeDetail()");
               this.isShowDetail = false;
             }
 				},
@@ -180,6 +207,7 @@
                 margin-right 4px
                 bg-image('bulletin')
                 background-size 22px 12px
+                vertical-align baseline
             .bulletin-text
                 font-size 10px
                 vertical-align top
@@ -223,6 +251,58 @@
                       font-weight 700
                     .star
                       text-align center
+                      margin-top 16px
+                    .title
+                      display flex
+                      margin 28px auto 24px auto
+                      width 80%
+                      .line
+                        flex: 1
+                        position: relative
+                        top: -6px
+                        border-bottom: 1px solid rgba(255, 255, 255, 0.2)
+                      .text
+                        padding 0 12px
+                        font-size 14px
+                        font-weight 700 
+                    .support_items
+                      width 70%
+                      text-align left
+                      margin 24px auto 28px auto
+                      .support_item
+                        margin-bottom 12px
+                        font-size 12px
+                        font-weight 400
+                        line-height 16px
+                        color rgb(255, 255, 255, 255)
+                        .icon
+                          vertical-align top
+                          display inline-block
+                          width 16px
+                          height 16px
+                          margin-right 2px
+                          margin-left 12px
+                          &.decrease
+                              bg-image('decrease_1')
+                          &.discount
+                              bg-image('discount_1')
+                          &.guarantee
+                              bg-image('guarantee_1')
+                          &.invoice
+                              bg-image('invoice_1')
+                          &.special
+                              bg-image('special_1')
+                          background-size 16px
+                    .seller_bulletin
+                      width 80%
+                      margin 0 auto
+                      .content
+                        padding 0 12px
+                        text-align left
+                        font-size 12px
+                        font-weight 200
+                        line-height 24px
+                        color rgb(255, 255, 255, 255)
             .detail-close
                 position relative
                 width 32px
