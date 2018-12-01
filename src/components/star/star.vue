@@ -15,7 +15,7 @@
                 default: 24
             },
             score: {
-                type: String,   // 分数
+                type: Number,   // 分数
                 default: 0
             }
         },
