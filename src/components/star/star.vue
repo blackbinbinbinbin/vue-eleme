@@ -6,11 +6,11 @@
 
 <script type="text/ecmascript-6">
 /* eslint-disable */
-		const STARLEN = 5;
+	const STARLEN = 5;
     export default {
         props: {
             size: {
-								// 星星尺寸：24,36,48
+				// 星星尺寸：24,36,48
                 type: String,
                 default: 24
             },
@@ -22,44 +22,44 @@
         data () {
             return {
             }
-				},
+		},
         computed: {
             starType () {
                 return 'star-'+this.size;
-						},
-						itemClasses () {
-							var on = 0;
-							var off = 0;
-							var half = 0;
-							on = Math.floor(this.score);
-							if (on > 0 && this.score-on > 0.5) {
-								half = 1;
-							}
-							if ((5-on-half) > 0) {
-								off = (5-on-half);
-							}
-							
-							let classes_item_list = [];
-							for (var i = 0; i < STARLEN; i++) {
-								if (on > 0) {
-									classes_item_list.push('on');
-									on--;
-									continue;
-								}
-								if (half > 0) {
-									classes_item_list.push('half');
-									half--;
-									continue;
-								}
-								if (off > 0) {
-									classes_item_list.push('off');
-									off--;
-									continue;
-								}
-							}
-							return classes_item_list;
-						}
+			},
+			itemClasses () {
+				var on = 0;
+				var off = 0;
+				var half = 0;
+				on = Math.floor(this.score);
+				if (on > 0 && this.score-on > 0.5) {
+					half = 1;
 				}
+				if ((5-on-half) > 0) {
+					off = (5-on-half);
+				}
+				
+				let classes_item_list = [];
+				for (var i = 0; i < STARLEN; i++) {
+					if (on > 0) {
+						classes_item_list.push('on');
+						on--;
+						continue;
+					}
+					if (half > 0) {
+						classes_item_list.push('half');
+						half--;
+						continue;
+					}
+					if (off > 0) {
+						classes_item_list.push('off');
+						off--;
+						continue;
+					}
+				}
+				return classes_item_list;
+			}
+		}
     }
 </script>
 
