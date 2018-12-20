@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div class="goods">
   <div class="menu-wrapper" ref="menuWrapper">
     <ul>
@@ -30,34 +31,49 @@
                 <span class="now">￥{{food.price}}</span>
                 <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
               </div>
+              <!-- 购物车点标 -->
+              <div class="cart-wrapper">
+                <cartcontrol @add="addFood" :food="food"></cartcontrol>
+              </div>
             </div>
           </li>
         </ul>
       </li>
     </ul>
   </div>
+  <shopcart v-model="goods" ref="shopcart" :select-foods="selectFoods" :deliveryPrice="seller.deliveryPrice"
+                :minPrice="seller.minPrice"></shopcart>
+  </div>
   </div>
 </template>
 
-<script>
+<script type="text/ecmascript-6">
   import { getGoods } from 'api/index.js';
   import icon from 'components/icon/icon.vue';
   import BScroll from 'better-scroll';
+  import shopcart from 'components/shopcart/shopcart.vue';
+  import cartcontrol from 'components/cartcontrol/cartcontrol.vue';
 
   export default {
     props: {
+      // 这里有个坑，这里的goods.vue是router来渲染的，那么在传入seller的时候可以从<router>传入
       seller: {
         type: Object
+      },
+      goodsId: {
+        type: Number,
+        default () {
+          return 1;
+        }
       }
     },
     data () {
       return {
-        goods: {
-          id: 1
-        },
+        goods: [],
         // 数组装有滑动时每个food-list的高度
         listHeight: [],
-        scrollY: 0
+        scrollY: 0,
+        selectedFood: {}
       }
     },
     computed: {
@@ -69,9 +85,23 @@
             return i;
           }
         }
-
         // 如果没有滑动,返回0
         return 0;
+      },
+      // 计算购物车所选商品
+      selectFoods () {
+        console.log('in');
+        let foods = [];
+        let len = this.goods.length;
+        for (let index = 0; index < len; index++) {
+          let element = this.goods[index];
+          element.foods.forEach((food) => {
+            if (food.count) {
+              foods.push(food);
+            }
+          });
+        }
+        return foods;
       }
     },
     created () {
@@ -80,7 +110,7 @@
     methods: {
       _getGoods () {
         getGoods({
-          id: this.goods.id
+          id: this.goodsId
         }).then((goods) => {
           this.goods = Object.assign({}, this.goods, goods);
           // nextTick 保证dom已经渲染，dom真正渲染是在 nextTick 函数之后
@@ -115,6 +145,15 @@
           this.listHeight.push(height);
         }
       },
+      addFood (target) {
+        this._drop(target);
+      },
+      _drop (target) {
+        // 体验优化,异步执行下落动画
+        this.$nextTick(() => {
+          // this.$refs.shopcart.drop(target);
+        });
+      },
       // 选择菜单
       selectMenu (index, event) {
         // 在传入的 event 中，如果是移动页面 better-scroll 会禁止掉原生的click点击，而派发自己的点击事件
@@ -129,7 +168,9 @@
       }
     },
     components: {
-      icon
+      icon,
+      shopcart,
+      cartcontrol
     }
   };
 </script>
@@ -220,4 +261,8 @@
                 text-decoration line-through
                 font-size 10px
                 color rgb(174, 153, 159)
+            .cart-wrapper
+              position absolute
+              right 0
+              bottom 12px
 </style>
