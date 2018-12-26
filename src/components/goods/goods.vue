@@ -89,19 +89,19 @@
         return 0;
       },
       // 计算购物车所选商品
-      selectFoods () {
-        console.log('in');
-        let foods = [];
-        let len = this.goods.length;
-        for (let index = 0; index < len; index++) {
-          let element = this.goods[index];
-          element.foods.forEach((food) => {
-            if (food.count) {
-              foods.push(food);
+      selectFoods: {
+        cache: false,
+        get: function () {
+          let foods = [];
+          for (let index in this.goods) {
+            for (let key in this.goods[index].foods) {
+              if (this.goods[index].foods[key].count > 0) {
+                foods.push(this.goods[index].foods[key]);
+              }
             }
-          });
+          }
+          return foods;
         }
-        return foods;
       }
     },
     created () {
@@ -112,7 +112,16 @@
         getGoods({
           id: this.goodsId
         }).then((goods) => {
-          this.goods = Object.assign({}, this.goods, goods);
+          let goodsRet = Object.assign({}, this.goods, goods);
+          var arr = Object.keys(goodsRet);
+          if (arr.length > 0) {
+            for (let index in goodsRet) {
+              for (let key in goodsRet[index].foods) {
+                goodsRet[index].foods[key].count = 0;
+              }
+            }
+          }
+          this.goods = goodsRet;
           // nextTick 保证dom已经渲染，dom真正渲染是在 nextTick 函数之后
           this.$nextTick(() => {
             // 实例化 better-scroll

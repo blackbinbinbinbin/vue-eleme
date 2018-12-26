@@ -33,6 +33,8 @@
         } else {
           this.food.count++;
         }
+        // 不知道是啥bug，一定要这样子改变这个food的原来的属性，才能使得外层的 selectFoods 计算属性被检查到变化
+        this.food.sellCount++;
         this.$emit(EVENT_ADD, event.target);
       },
       decreaseCart (event) {
