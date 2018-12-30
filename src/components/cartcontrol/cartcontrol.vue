@@ -35,6 +35,8 @@
         }
         // 不知道是啥bug，一定要这样子改变这个food的原来的属性，才能使得外层的 selectFoods 计算属性被检查到变化
         this.food.sellCount++;
+
+        // 在点标被点击后，可以向上向它的父组件(goods)发送一个自定义事件，可以将其点击的节点event发送出去
         this.$emit(EVENT_ADD, event.target);
       },
       decreaseCart (event) {

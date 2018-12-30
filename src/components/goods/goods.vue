@@ -33,6 +33,7 @@
               </div>
               <!-- 购物车点标 -->
               <div class="cart-wrapper">
+                <!-- 这里绑定的 @add 是接收 cartcontrol 内add点击事件，并且触发addFood()方法-->
                 <cartcontrol @add="addFood" :food="food"></cartcontrol>
               </div>
             </div>
@@ -154,13 +155,15 @@
           this.listHeight.push(height);
         }
       },
+      // 这里触发的是cartcontrol内的点击事件
       addFood (target) {
         this._drop(target);
       },
       _drop (target) {
         // 体验优化,异步执行下落动画
         this.$nextTick(() => {
-          // this.$refs.shopcart.drop(target);
+          // 调用组件 shopcart 内的 drop() 方法
+          this.$refs.shopcart.drop(target);
         });
       },
       // 选择菜单
